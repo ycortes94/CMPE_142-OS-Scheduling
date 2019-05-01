@@ -10,7 +10,7 @@ void FIFO(int *arr1, int *arr2, int *arr3)
    int y = sizeof(arr2)/2;
    int z = sizeof(arr3)/2;
 
-   int bt[100], waitTime[100], turnaroundTime[100], startTime[100], endTime[100], avgWaitTime = 0, avgTurnaroundTime = 0, i, j;
+   int waitTime[100], turnaroundTime[100], startTime[100], endTime[100], avgWaitTime = 0, avgTurnaroundTime = 0, i, j;
    int temp1, temp2, temp3;
    waitTime[0] = 0; //waiting time for first process is 0
 
@@ -32,7 +32,6 @@ void FIFO(int *arr1, int *arr2, int *arr3)
             arr3[j] = temp3;
          }
       }
-      printf("\n%d\t\t%d\t\t%d", arr1[i], arr2[i], arr3[i]);
    }
 
    //calculating waiting time
@@ -43,18 +42,24 @@ void FIFO(int *arr1, int *arr2, int *arr3)
          waitTime[i] += arr2[j];
       }
    }
-
+   printf("FIFO Algorithm");
    printf("\nProcess\t\tWait Time\tT.A Time\tStart Time\t\tEnd Time");
    //calculating turnaround time
    for (i = 0; i < y; i++)
    {
-      
-      startTime[i] = waitTime[i] + arr2[i];
-      endTime[i] = startTime[i] + arr3[i];
-      turnaroundTime[i] = endTime[i] - startTime[i];
+      if(i > 0) {
+         startTime[i] = endTime[i-1];
+         endTime[i] = startTime[i]+arr3[i];
+         turnaroundTime[i] = endTime[i] - startTime[i];
+      } else
+      {
+         startTime[i] = arr2[i];
+         endTime[i] = startTime[i] + arr3[i];
+         turnaroundTime[i] = endTime[i] - startTime[i];
+      }
+      printf("\nP[%d]\t\t\t%d\t\t\t\t\t\t%d\t\t%d\t\t%d", arr1[i], waitTime[i], turnaroundTime[i], startTime[i], endTime[i]);
       avgWaitTime += waitTime[i];
       avgTurnaroundTime += turnaroundTime[i];
-      printf("\nP[%d]\t\t\t%d\t\t\t\t\t\t%d\t\t%d\t\t%d", arr1[i], waitTime[i], turnaroundTime[i], startTime[i], endTime[i]);
    }
 
    avgWaitTime /= i;
@@ -69,8 +74,8 @@ int SJF(int *arr1, int *arr2, int *arr3)
    int y = sizeof(arr2)/2;
    int z = sizeof(arr3)/2;
 
-   int bt[100], waitTime[100], turnaroundTime[100], startTime[100], endTime[100], avgWaitTime = 0, avgTurnaroundTime = 0, i, j;
-   int n, total = 0, pos1, pos2, pos3, temp1, temp2, temp3;
+   int waitTime[100], turnaroundTime[100], startTime[100], endTime[100], avgWaitTime = 0, avgTurnaroundTime = 0, i, j;
+   int pos1, pos2, pos3, temp1, temp2, temp3;
    int a;
 
    //sorting duration in ascending order using selection sort
@@ -91,10 +96,8 @@ int SJF(int *arr1, int *arr2, int *arr3)
             arr3[j] = temp3;
          }
       }
-      // printf("\n%d\t\t%d\t\t%d", arr1[i], arr2[i], arr3[i]);
    }
    waitTime[0] = 0; //waiting time for first process will be zero
-
    //calculate waiting time
    for (i = 0; i < y; i++)
    {
@@ -102,13 +105,21 @@ int SJF(int *arr1, int *arr2, int *arr3)
       for (j = 0; j <= i; j++)
          waitTime[i] += arr2[j];
    }
-
-   printf("\n\nProcess\t\tWait Time\tT.A Time\tStart Time\t\tEnd Time");
+   printf("\n\nSJF Algorithm");
+   printf("\nProcess\t\tWait Time\tT.A Time\tStart Time\t\tEnd Time");
    for (i = 0; i < y; i++)
    {
-      startTime[i] = waitTime[i] + arr2[i];
-      endTime[i] = startTime[i] + arr3[i];
-      turnaroundTime[i] = endTime[i] - startTime[i];
+      if(i > 0) {
+         startTime[i] = endTime[i-1];
+         // printf("%d\n", endTime[i-1]);
+         endTime[i] = startTime[i]+arr3[i];
+         turnaroundTime[i] = endTime[i] - startTime[i];
+      } else
+      {
+         startTime[i] = waitTime[i];
+         endTime[i] = startTime[i] + arr3[i];
+         turnaroundTime[i] = endTime[i] - startTime[i];
+      }
       avgWaitTime += waitTime[i];
       avgTurnaroundTime += turnaroundTime[i];
       printf("\nP[%d]\t\t\t%d\t\t\t\t\t\t%d\t\t%d\t\t%d", arr1[i], waitTime[i], turnaroundTime[i], startTime[i], endTime[i]);
@@ -123,6 +134,67 @@ int SJF(int *arr1, int *arr2, int *arr3)
 //    /*BJF*/
 int BJF(int *arr1, int *arr2, int *arr3)
 {
+   int x = sizeof(arr1)/2;
+   int y = sizeof(arr2)/2;
+   int z = sizeof(arr3)/2;
+
+   int waitTime[100], turnaroundTime[100], startTime[100], endTime[100], avgWaitTime = 0, avgTurnaroundTime = 0, i, j;
+   int pos1, pos2, pos3, temp1, temp2, temp3;
+   int a;
+
+   //sorting duration in descending order using selection sort
+   for(i = 0; i < y; i++) {
+      for(j=i+1; j < y; j++) {
+         if(arr3[j] > arr3[i])
+         {
+            temp1 = arr1[i];
+            arr1[i] = arr1[j];
+            arr1[j] = temp1;
+
+            temp2 = arr2[i];
+            arr2[i] = arr2[j];
+            arr2[j] = temp2;
+
+            temp3 = arr3[i];
+            arr3[i] = arr3[j];
+            arr3[j] = temp3;
+         }
+      }
+      // printf("\n%d\t\t%d\t\t%d", arr1[i], arr2[i], arr3[i]);
+   }
+   waitTime[0] = 0; //waiting time for first process will be zero
+
+   //calculate waiting time
+   for (i = 1; i < y; i++)
+   {
+      waitTime[i] = 0;
+      for (j = 0; j <= i; j++)
+         waitTime[i] += arr2[j];
+   }
+   printf("\n\nBJF Algorithm");
+   printf("\nProcess\t\tWait Time\tT.A Time\tStart Time\t\tEnd Time");
+   for (i = 0; i < y; i++)
+   {
+      if(i > 0) {
+         startTime[i] = endTime[i-1];
+         // printf("%d\n", endTime[i-1]);
+         endTime[i] = startTime[i]+arr3[i];
+         turnaroundTime[i] = endTime[i] - startTime[i];
+      } else
+      {
+         startTime[i] = waitTime[i];
+         endTime[i] = startTime[i] + arr3[i];
+         turnaroundTime[i] = endTime[i] - startTime[i];
+      }
+      avgWaitTime += waitTime[i];
+      avgTurnaroundTime += turnaroundTime[i];
+      printf("\nP[%d]\t\t\t%d\t\t\t\t\t\t%d\t\t%d\t\t%d", arr1[i], waitTime[i], turnaroundTime[i], startTime[i], endTime[i]);
+   }
+
+   avgWaitTime /= i;
+   avgTurnaroundTime /= i;
+   printf("\n\nAverage Waiting Time:%d", avgWaitTime);
+   printf("\nAverage Turnaround Time:%d", avgTurnaroundTime);
    return 0;
 }
 
