@@ -76,7 +76,7 @@ int SJF(int *arr1, int *arr2, int *arr3)
    //sorting duration in ascending order using selection sort
    for(i = 0; i < y; i++) {
       for(j=i+1; j < y; j++) {
-         if(arr2[j]< arr2[i] && arr3[j] < arr3[i])
+         if(arr3[j] < arr3[i])
          {
             temp1 = arr1[i];
             arr1[i] = arr1[j];
@@ -91,27 +91,27 @@ int SJF(int *arr1, int *arr2, int *arr3)
             arr3[j] = temp3;
          }
       }
-      printf("\n%d\t\t%d\t\t%d", arr1[i], arr2[i], arr3[i]);
+      // printf("\n%d\t\t%d\t\t%d", arr1[i], arr2[i], arr3[i]);
    }
    waitTime[0] = 0; //waiting time for first process will be zero
 
    //calculate waiting time
-   for (i = 1; i < y; i++)
+   for (i = 0; i < y; i++)
    {
       waitTime[i] = 0;
       for (j = 0; j <= i; j++)
          waitTime[i] += arr2[j];
    }
 
-   printf("\nProcess\t\tWaiting Time\tTurnaround Time");
-   for (i = 0; i < n; i++)
+   printf("\n\nProcess\t\tWait Time\tT.A Time\tStart Time\t\tEnd Time");
+   for (i = 0; i < y; i++)
    {
       startTime[i] = waitTime[i] + arr2[i];
-      endTime[i] = startTime + arr3[i];
-      turnaroundTime[i] = endTime[i] - startTime[i]; //calculate turnaround time
+      endTime[i] = startTime[i] + arr3[i];
+      turnaroundTime[i] = endTime[i] - startTime[i];
       avgWaitTime += waitTime[i];
       avgTurnaroundTime += turnaroundTime[i];
-      printf("\np%d\t\t     %d\t\t\t%d", arr1[i], waitTime[i], turnaroundTime[i]);
+      printf("\nP[%d]\t\t\t%d\t\t\t\t\t\t%d\t\t%d\t\t%d", arr1[i], waitTime[i], turnaroundTime[i], startTime[i], endTime[i]);
    }
 
    avgWaitTime /= i;
@@ -121,19 +121,19 @@ int SJF(int *arr1, int *arr2, int *arr3)
    return 0;
 }
 //    /*BJF*/
-int BJF(int *arr1, int *arr2, int *arr3, size_t max)
+int BJF(int *arr1, int *arr2, int *arr3)
 {
    return 0;
 }
 
 //    /*STCF*/
-int STCF(int *arr1, int *arr2, int *arr3, size_t max)
+int STCF(int *arr1, int *arr2, int *arr3)
 {
    return 0;
 }
 
 //    /*RR*/
-int RR(int *arr1, int *arr2, int *arr3, size_t max)
+int RR(int *arr1, int *arr2, int *arr3)
 {
    return 0;
 }
@@ -191,9 +191,11 @@ int main(int argc, char **argv)
       //Calling each scheduling algorithm
       FIFO(jobIDs, arrivalTime, duration);
       SJF(jobIDs, arrivalTime, duration);
-      // BJF(arr1, arr2, arr3);
-      // STCF(arr1, arr2, arr3);
-      // RR(arr1, arr2, arr3);
+      BJF(jobIDs, arrivalTime, duration);
+      STCF(jobIDs, arrivalTime, duration);
+      // RR(jobIDs, arrivalTime, duration);
+
+      
       free(jobIDs);
       free(arrivalTime);
       free(duration);
