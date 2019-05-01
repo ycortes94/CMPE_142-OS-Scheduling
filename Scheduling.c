@@ -43,7 +43,7 @@ void FIFO(int *arr1, int *arr2, int *arr3)
       }
    }
    printf("FIFO Algorithm");
-   printf("\nProcess\t\tWait Time\tT.A Time\tStart Time\t\tEnd Time");
+   printf("\nProcess\t\tWait Time\tTurnAround Time\tStart Time\t\tEnd Time");
    //calculating turnaround time
    for (i = 0; i < y; i++)
    {
@@ -106,7 +106,7 @@ int SJF(int *arr1, int *arr2, int *arr3)
          waitTime[i] += arr2[j];
    }
    printf("\n\nSJF Algorithm");
-   printf("\nProcess\t\tWait Time\tT.A Time\tStart Time\t\tEnd Time");
+   printf("\nProcess\t\tWait Time\tTurnAround Time\tStart Time\t\tEnd Time");
    for (i = 0; i < y; i++)
    {
       if(i > 0) {
@@ -172,7 +172,7 @@ int BJF(int *arr1, int *arr2, int *arr3)
          waitTime[i] += arr2[j];
    }
    printf("\n\nBJF Algorithm");
-   printf("\nProcess\t\tWait Time\tT.A Time\tStart Time\t\tEnd Time");
+   printf("\nProcess\t\tWait Time\tTurnAround Time\tStart Time\t\tEnd Time");
    for (i = 0; i < y; i++)
    {
       if(i > 0) {
@@ -201,7 +201,67 @@ int BJF(int *arr1, int *arr2, int *arr3)
 //    /*STCF*/
 int STCF(int *arr1, int *arr2, int *arr3)
 {
-   return 0;
+   int x = sizeof(arr1)/2;
+   int y = sizeof(arr2)/2;
+   int z = sizeof(arr3)/2;
+
+   int waitTime[100], turnaroundTime[100], startTime[100], endTime[100], avgWaitTime = 0, avgTurnaroundTime = 0, i, j;
+   int burst_time[100], temp[100];
+   int pos1, pos2, pos3, temp1, temp2, temp3;
+   int smallest, count = 0, time, limit;
+   double wait_time = 0, turnaround_time = 0, end;
+   float average_waiting_time, average_turnaround_time;
+
+   //sorting duration in ascending order using selection sort
+   for(i = 0; i < y; i++) {
+      for(j=i+1; j < y; j++) {
+         if(arr3[j] < arr3[i])
+         {
+            temp1 = arr1[i];
+            arr1[i] = arr1[j];
+            arr1[j] = temp1;
+
+            temp2 = arr2[i];
+            arr2[i] = arr2[j];
+            arr2[j] = temp2;
+
+            temp3 = arr3[i];
+            arr3[i] = arr3[j];
+            arr3[j] = temp3;
+         }
+      }
+   }
+      for(i = 0; i < y; i++)
+      {
+            temp[i] = arr3[i];
+      }
+      arr3[9] = 9999;  
+      for (time = 0; count != y; time++) {
+         smallest = 9;
+         for (i = 0; i < y; i++)
+         {
+            if(arr2[i] <= time && arr3[i] < arr3[smallest] && arr3[i] > 0)
+            {
+               smallest = i;
+            }
+         }
+         arr3[smallest]--;
+         if(arr3[smallest] ==  0)
+         {
+            count++;
+            end = time + 1;
+            endTime[smallest] = end;
+            waitTime[smallest] = end - arr2[smallest] - temp[smallest];
+            turnaroundTime[smallest] = end - arr2[smallest];
+         }
+      }
+      printf("\nSTCF Algorithm");
+      printf("\npid \t Duration \t Arrival \t Waiting \t Turnaround \t Completion");
+      for(i=1; i < y; i++)
+      {
+         printf("\n P[%d] \t   %d \t %d\t\t%d   \t\t%d\t\t%d",arr1[i],temp[i],arr2[i],waitTime[i],turnaroundTime[i],endTime[i]); 
+      }
+      return 0;
 }
 
 //    /*RR*/
