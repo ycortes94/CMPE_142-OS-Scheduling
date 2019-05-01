@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 //    /*FIFO*/
 void FIFO(int *arr1, int *arr2, int *arr3)
@@ -241,7 +242,7 @@ int RR(int *arr1, int *arr2, int *arr3)
    int totalT = 0, totalTurnT = 0, avgWaitT, avgTurnT = 0, avgResponseT = 0;
    int startTime[101], endTime[100], remainTime[100], turnAroundT[100], waitTime[100], pQueue[100], pFlag[100], gantt[10000];
    int n = sizeof(arr2)/2;
-   int done = 1;
+   bool done = 1;
 
    //sort arrival time in ascending order
    for(i = 0; i < n; i++) {
